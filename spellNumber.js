@@ -4,7 +4,7 @@ var info = {
 			"twitter":"marafee1243",
 			"createdOn":"24-Dec-2010 12:36 AM",
 			"license":"OpenSource License",
-			"comments":"Use it, Share it, Upgrade it at your own risk. Will extend those number soon",
+			"comments":"Use it, Share it, Upgrade it at your own risk. Will extend those number soon. 0-9999",
 			"usage":"just call spellNumber(43) function and get results as forty three"
 		};
 */
@@ -39,25 +39,22 @@ var countDigits = function (n) {
 	return c.length;
 };
 
-var spellNumber = function (cD) {
+var getTenth = function (m) {
 	
-	if (countDigits(cD) == 1) {
-		return numbers[cD];
-	}
+	var s = '' + m + '';	
 	
-	var s = '' + cD + '';	
-	if (cD > 10 && cD < 20) {
-		return teens[s];
-	} 
-	
-	if (cD%10 == 0) {
+	if (m%10 == 0) {
 		return tenths[s];
 	}
 	
-	if(cD%10 != 0 && countDigits(cD) == 2) {
+	if (m > 10 && m < 20) {
+		return teens[s];
+	} 
+	
+	if (countDigits(m) == 2 && m%10 != 0) {
 		
-		var a = cD%10;
-		var b = parseInt(cD/10) * 10;
+		var a = m%10;
+		var b = parseInt(m/10) * 10;
 		var c = '' + b + '';
 		
 		var secondDigitWord = tenths[c];
@@ -65,6 +62,79 @@ var spellNumber = function (cD) {
 		var totalNumberWord = secondDigitWord + ' ' + firstDigitWord;
 		
 		return totalNumberWord;
+	}
+	
+};
+
+var getHundred = function (o) {
+	
+	if (o%100 == 0) {
+		var oA = o/100;
+		return numbers[oA] + ' hundred';
+	}
+	
+	if (o%100 != 0) {
+		var oB = parseInt(o/100);
+		var oBString = numbers[oB] + ' hundred';
+		
+		var oC = parseInt(o%100);
+		var oCString = '';
+		if (oC <= 9) {
+			oCString = numbers[oC];
+		} else {
+			oCString = getTenth(oC);
+		}
+		
+		var oFinalString = oBString + ' ' + oCString;
+		return oFinalString;
+	}
+	
+	
+};
+
+var getThousand = function (p) {
+	
+	if (p%1000 == 0) {
+		var pA = p/1000;
+		return numbers[pA] + ' thousand';
+	}
+	
+	if (p%1000 != 0) {
+		var pB = parseInt(p/1000);
+		var pBString = numbers[pB] + ' thousand';
+		
+		var pC = parseInt(p%1000);
+		var pCString = '';
+		if (countDigits(pC) == 1) {
+			pCString = numbers[pC];
+		} else if (countDigits(pC) == 2)  {
+			pCString = getTenth(pC);
+		} else {
+			pCString = getHundred(pC);
+		}
+		
+		var pFinalString = pBString + ' ' + pCString;
+		return pFinalString;
+	}
+	
+};
+
+var spellNumber = function (cD) {
+	
+	if (countDigits(cD) == 1) {
+		return numbers[cD];
+	}
+	
+	if (countDigits(cD) == 2) {
+		return getTenth(cD);
+	}
+	
+	if (countDigits(cD) == 3) {
+		return getHundred(cD);
+	}
+	
+	if (countDigits(cD) == 4) {
+		return getThousand(cD);
 	}
 	
 };
